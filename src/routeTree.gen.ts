@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PalyginimasRouteImport } from './routes/palyginimas'
+import { Route as PortalasRouteImport } from './routes/portalas'
+import { Route as StraipsnisRouteImport } from './routes/straipsnis'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PalyginimasRoute = PalyginimasRouteImport.update({
+  id: '/palyginimas',
+  path: '/palyginimas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalasRoute = PortalasRouteImport.update({
+  id: '/portalas',
+  path: '/portalas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StraipsnisRoute = StraipsnisRouteImport.update({
+  id: '/straipsnis',
+  path: '/straipsnis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/palyginimas': typeof PalyginimasRoute
+  '/portalas': typeof PortalasRoute
+  '/straipsnis': typeof StraipsnisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/palyginimas': typeof PalyginimasRoute
+  '/portalas': typeof PortalasRoute
+  '/straipsnis': typeof StraipsnisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/palyginimas': typeof PalyginimasRoute
+  '/portalas': typeof PortalasRoute
+  '/straipsnis': typeof StraipsnisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/palyginimas' | '/portalas' | '/straipsnis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/palyginimas' | '/portalas' | '/straipsnis'
+  id: '__root__' | '/' | '/palyginimas' | '/portalas' | '/straipsnis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PalyginimasRoute: typeof PalyginimasRoute
+  PortalasRoute: typeof PortalasRoute
+  StraipsnisRoute: typeof StraipsnisRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/palyginimas': {
+      id: '/palyginimas'
+      path: '/palyginimas'
+      fullPath: '/palyginimas'
+      preLoaderRoute: typeof PalyginimasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portalas': {
+      id: '/portalas'
+      path: '/portalas'
+      fullPath: '/portalas'
+      preLoaderRoute: typeof PortalasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/straipsnis': {
+      id: '/straipsnis'
+      path: '/straipsnis'
+      fullPath: '/straipsnis'
+      preLoaderRoute: typeof StraipsnisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PalyginimasRoute: PalyginimasRoute,
+  PortalasRoute: PortalasRoute,
+  StraipsnisRoute: StraipsnisRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
