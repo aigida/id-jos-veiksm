@@ -24,11 +24,11 @@ import type { ArticleAnalysis } from "@/lib/analysis.schema";
 import { portalFromUrl } from "@/lib/portals";
 import { SAMPLE_ARTICLE } from "@/lib/sample-article";
 
-type ArticleSearch = { url?: string };
+type ArticleSearch = { url?: string | undefined };
 
 export const Route = createFileRoute("/straipsnis")({
   validateSearch: (search: Record<string, unknown>): ArticleSearch => ({
-    url: typeof search.url === "string" ? search.url : undefined,
+    url: typeof search["url"] === "string" ? search["url"] : undefined,
   }),
   head: () => ({
     meta: [

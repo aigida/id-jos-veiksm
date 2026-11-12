@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DELFI_DEMO } from "@/lib/demo-delfi";
 import { findPortal } from "@/lib/portals";
 
-type PortalSearch = { q?: string; laikotarpis?: string };
+type PortalSearch = { q?: string | undefined; laikotarpis?: string | undefined };
 
 const PERIODS = [
   { value: "7", label: "Paskutinės 7 dienos" },
@@ -27,8 +27,8 @@ const PERIODS = [
 
 export const Route = createFileRoute("/portalas")({
   validateSearch: (search: Record<string, unknown>): PortalSearch => ({
-    q: typeof search.q === "string" ? search.q : undefined,
-    laikotarpis: typeof search.laikotarpis === "string" ? search.laikotarpis : undefined,
+    q: typeof search["q"] === "string" ? search["q"] : undefined,
+    laikotarpis: typeof search["laikotarpis"] === "string" ? search["laikotarpis"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -77,7 +77,7 @@ function PortalPage() {
         />
         <Select value={period} onValueChange={(v) => navigate({ search: { q, laikotarpis: v } })}>
           <SelectTrigger className="h-11 bg-card" aria-label="Analizės laikotarpis">
-            <SelectValue />
+            <SelectValue>{PERIODS.find((p) => p.value === period)?.label}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {PERIODS.map((p) => (

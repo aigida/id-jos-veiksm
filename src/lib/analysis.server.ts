@@ -69,7 +69,7 @@ async function runStructured<T>(
       instructions,
       messages: [{ role: "user", content: prompt }],
       output: Output.object({ schema }),
-      abortSignal: signal,
+      ...(signal ? { abortSignal: signal } : {}),
       providerOptions: RESPONSES_OPTIONS,
       onError: ({ error }) => {
         streamError = error;

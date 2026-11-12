@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- AI analysis runs only in server functions (`src/lib/analysis.functions.ts` → `analysis.server.ts`) via Lovable AI Gateway Responses with strict structured-output schemas in `analysis.schema.ts`; keeps keys and prompts off the client.
+- AI excerpts are verified client-side against the submitted text (`src/lib/quote-check.ts`); keep every new conclusion type paired with an excerpt so it can be checked.
+- Portal reports use static demo data (`src/lib/demo-delfi.ts`) until automatic article collection exists; no database yet because nothing needs persisting.

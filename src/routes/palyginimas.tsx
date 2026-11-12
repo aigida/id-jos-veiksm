@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { FileText, Loader2, Plus, Scale, Trash2 } from "lucide-react";
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import {
@@ -23,11 +23,11 @@ import type { Comparison } from "@/lib/analysis.schema";
 import { PORTALS } from "@/lib/portals";
 import { SAMPLE_COMPARISON } from "@/lib/sample-article";
 
-type CompareSearch = { tema?: string };
+type CompareSearch = { tema?: string | undefined };
 
 export const Route = createFileRoute("/palyginimas")({
   validateSearch: (search: Record<string, unknown>): CompareSearch => ({
-    tema: typeof search.tema === "string" ? search.tema : undefined,
+    tema: typeof search["tema"] === "string" ? search["tema"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -103,9 +103,14 @@ function ComparePage() {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     const filled = slots.filter((s) => s.text.trim().length > 0);
-    if (filled.length < 2) return toast.error("Palyginimui reikia bent dviejų straipsnių tekstų.");
-    if (filled.some((s) => s.text.trim().length < 200)) return toast.error("Kiekvienas tekstas turi būti bent 200 simbolių.");
-    if (filled.some((s) => !s.portal.trim())) return toast.error("Nurodykite kiekvieno straipsnio portalą.");
+    let problem = "";
+    if (filled.length < 2) problem = "Palyginimui reikia bent dviejų straipsnių tekstų.";
+    else if (filled.some((s) => s.text.trim().length < 200)) problem = "Kiekvienas tekstas turi būti bent 200 simbolių.";
+    else if (filled.some((s) => !s.portal.trim())) problem = "Nurodykite kiekvieno straipsnio portalą.";
+    if (problem) {
+      toast.error(problem);
+      return;
+    }
     mutation.mutate({ topic, slots: filled });
   }
 
@@ -336,7 +341,7 @@ function ComparisonResult({
   );
 }
 
-function Row({ label, cells }: { label: string; cells: React.ReactNode[] }) {
+function Row({ label, cells }: { label: string; cells: ReactNode[] }) {
   return (
     <tr className="border-t border-border">
       <th scope="row" className="kicker p-3 text-left font-normal">{label}</th>
