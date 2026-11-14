@@ -1,4 +1,15 @@
 import { Link } from "@tanstack/react-router";
+import { LogIn, LogOut, UserRound } from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/lib/auth-context";
 
 import { Logo } from "./logo";
 
@@ -7,7 +18,48 @@ const NAV = [
   { to: "/straipsnis", label: "Straipsnis" },
   { to: "/palyginimas", label: "Palyginimas" },
   { to: "/metodika", label: "Metodika" },
+  { to: "/darbo-erdve", label: "Mano darbo erdvė" },
 ] as const;
+
+function AccountControl() {
+  const { user, ready, signOut } = useAuth();
+  if (!ready) return <span className="h-8 w-8" aria-hidden />;
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        search={{ redirect: undefined }}
+        className="ml-1 inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1.5 text-foreground hover:bg-muted"
+      >
+        <LogIn className="h-3.5 w-3.5" aria-hidden /> Prisijungti
+      </Link>
+    );
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-foreground hover:bg-muted"
+        aria-label="Paskyra"
+      >
+        <UserRound className="h-4 w-4" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuLabel className="truncate font-normal text-muted-foreground">{user.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/darbo-erdve">Mano darbo erdvė</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/projektai">Projektai</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => void signOut()}>
+          <LogOut className="mr-2 h-4 w-4" /> Atsijungti
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function SiteHeader() {
   return (
@@ -25,6 +77,7 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <AccountControl />
         </nav>
       </div>
     </header>

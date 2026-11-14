@@ -71,9 +71,20 @@ export function Section({
 }
 
 /** A quoted excerpt plus a badge telling whether it was found verbatim in the source text. */
-export function Excerpt({ text, source, className }: { text: string | null; source?: string; className?: string }) {
+export function Excerpt({
+  text,
+  source,
+  found: foundOverride,
+  className,
+}: {
+  text: string | null;
+  source?: string;
+  /** Pre-computed verification (e.g. stored with a saved analysis); wins over `source`. */
+  found?: boolean | null;
+  className?: string;
+}) {
   if (!text) return null;
-  const found = source ? quoteAppearsInText(text, source) : null;
+  const found = foundOverride !== undefined ? foundOverride : source ? quoteAppearsInText(text, source) : null;
   return (
     <figure className={cn("mt-2", className)}>
       <blockquote className="evidence text-[0.95rem] leading-relaxed text-foreground/85">„{text}“</blockquote>
