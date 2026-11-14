@@ -10,14 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MetodikaRouteImport } from './routes/metodika'
 import { Route as PalyginimasRouteImport } from './routes/palyginimas'
 import { Route as PortalasRouteImport } from './routes/portalas'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as StraipsnisRouteImport } from './routes/straipsnis'
+import { Route as AuthenticatedDarboErdveIndexRouteImport } from './routes/_authenticated/darbo-erdve.index'
+import { Route as AuthenticatedDarboErdveIdRouteImport } from './routes/_authenticated/darbo-erdve.$id'
+import { Route as AuthenticatedProjektaiIndexRouteImport } from './routes/_authenticated/projektai.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MetodikaRoute = MetodikaRouteImport.update({
@@ -35,53 +50,121 @@ const PortalasRoute = PortalasRouteImport.update({
   path: '/portalas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StraipsnisRoute = StraipsnisRouteImport.update({
   id: '/straipsnis',
   path: '/straipsnis',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDarboErdveIndexRoute =
+  AuthenticatedDarboErdveIndexRouteImport.update({
+    id: '/darbo-erdve/',
+    path: '/darbo-erdve/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDarboErdveIdRoute =
+  AuthenticatedDarboErdveIdRouteImport.update({
+    id: '/darbo-erdve/$id',
+    path: '/darbo-erdve/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjektaiIndexRoute =
+  AuthenticatedProjektaiIndexRouteImport.update({
+    id: '/projektai/',
+    path: '/projektai/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/metodika': typeof MetodikaRoute
   '/palyginimas': typeof PalyginimasRoute
   '/portalas': typeof PortalasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
+  '/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/darbo-erdve/': typeof AuthenticatedDarboErdveIndexRoute
+  '/projektai/': typeof AuthenticatedProjektaiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/metodika': typeof MetodikaRoute
   '/palyginimas': typeof PalyginimasRoute
   '/portalas': typeof PortalasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
+  '/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/darbo-erdve': typeof AuthenticatedDarboErdveIndexRoute
+  '/projektai': typeof AuthenticatedProjektaiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/metodika': typeof MetodikaRoute
   '/palyginimas': typeof PalyginimasRoute
   '/portalas': typeof PortalasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
+  '/_authenticated/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/_authenticated/darbo-erdve/': typeof AuthenticatedDarboErdveIndexRoute
+  '/_authenticated/projektai/': typeof AuthenticatedProjektaiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/metodika' | '/palyginimas' | '/portalas' | '/straipsnis'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/metodika' | '/palyginimas' | '/portalas' | '/straipsnis'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/auth'
     | '/metodika'
     | '/palyginimas'
     | '/portalas'
+    | '/reset-password'
     | '/straipsnis'
+    | '/darbo-erdve/$id'
+    | '/darbo-erdve/'
+    | '/projektai/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/auth'
+    | '/metodika'
+    | '/palyginimas'
+    | '/portalas'
+    | '/reset-password'
+    | '/straipsnis'
+    | '/darbo-erdve/$id'
+    | '/darbo-erdve'
+    | '/projektai'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/metodika'
+    | '/palyginimas'
+    | '/portalas'
+    | '/reset-password'
+    | '/straipsnis'
+    | '/_authenticated/darbo-erdve/$id'
+    | '/_authenticated/darbo-erdve/'
+    | '/_authenticated/projektai/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   MetodikaRoute: typeof MetodikaRoute
   PalyginimasRoute: typeof PalyginimasRoute
   PortalasRoute: typeof PortalasRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   StraipsnisRoute: typeof StraipsnisRoute
 }
 
@@ -92,6 +175,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/metodika': {
@@ -115,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/straipsnis': {
       id: '/straipsnis'
       path: '/straipsnis'
@@ -122,14 +226,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StraipsnisRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/darbo-erdve/': {
+      id: '/_authenticated/darbo-erdve/'
+      path: '/darbo-erdve'
+      fullPath: '/darbo-erdve/'
+      preLoaderRoute: typeof AuthenticatedDarboErdveIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/darbo-erdve/$id': {
+      id: '/_authenticated/darbo-erdve/$id'
+      path: '/darbo-erdve/$id'
+      fullPath: '/darbo-erdve/$id'
+      preLoaderRoute: typeof AuthenticatedDarboErdveIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projektai/': {
+      id: '/_authenticated/projektai/'
+      path: '/projektai'
+      fullPath: '/projektai/'
+      preLoaderRoute: typeof AuthenticatedProjektaiIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDarboErdveIdRoute: typeof AuthenticatedDarboErdveIdRoute
+  AuthenticatedDarboErdveIndexRoute: typeof AuthenticatedDarboErdveIndexRoute
+  AuthenticatedProjektaiIndexRoute: typeof AuthenticatedProjektaiIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDarboErdveIdRoute: AuthenticatedDarboErdveIdRoute,
+  AuthenticatedDarboErdveIndexRoute: AuthenticatedDarboErdveIndexRoute,
+  AuthenticatedProjektaiIndexRoute: AuthenticatedProjektaiIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   MetodikaRoute: MetodikaRoute,
   PalyginimasRoute: PalyginimasRoute,
   PortalasRoute: PortalasRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   StraipsnisRoute: StraipsnisRoute,
 }
 export const routeTree = rootRouteImport

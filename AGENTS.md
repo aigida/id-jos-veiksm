@@ -32,4 +32,5 @@ use the editor.
 ## Project rules
 - AI analysis runs only in server functions (`src/lib/analysis.functions.ts` → `analysis.server.ts`) via Lovable AI Gateway Responses with strict structured-output schemas in `analysis.schema.ts`; keeps keys and prompts off the client.
 - AI excerpts are verified client-side against the submitted text (`src/lib/quote-check.ts`); keep every new conclusion type paired with an excerpt so it can be checked.
-- Portal reports use static demo data (`src/lib/demo-delfi.ts`) until automatic article collection exists; no database yet because nothing needs persisting.
+- Portal reports use static demo data (`src/lib/demo-delfi.ts`) until automatic article collection exists.
+- Saved analyses/projects live in Lovable Cloud tables with owner-only RLS, accessed from the browser client via `src/lib/workspace.ts`; full article text is never stored, only analysis JSON plus an excerpt-verification snapshot (`src/lib/excerpts.ts`).
