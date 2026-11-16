@@ -19,7 +19,9 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as StraipsnisRouteImport } from './routes/straipsnis'
 import { Route as AuthenticatedDarboErdveIndexRouteImport } from './routes/_authenticated/darbo-erdve.index'
 import { Route as AuthenticatedDarboErdveIdRouteImport } from './routes/_authenticated/darbo-erdve.$id'
+import { Route as AuthenticatedDarboErdvePalyginimasRouteImport } from './routes/_authenticated/darbo-erdve.palyginimas'
 import { Route as AuthenticatedProjektaiIndexRouteImport } from './routes/_authenticated/projektai.index'
+import { Route as AuthenticatedProjektaiIdRouteImport } from './routes/_authenticated/projektai.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -72,10 +74,22 @@ const AuthenticatedDarboErdveIdRoute =
     path: '/darbo-erdve/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDarboErdvePalyginimasRoute =
+  AuthenticatedDarboErdvePalyginimasRouteImport.update({
+    id: '/darbo-erdve/palyginimas',
+    path: '/darbo-erdve/palyginimas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProjektaiIndexRoute =
   AuthenticatedProjektaiIndexRouteImport.update({
     id: '/projektai/',
     path: '/projektai/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjektaiIdRoute =
+  AuthenticatedProjektaiIdRouteImport.update({
+    id: '/projektai/$id',
+    path: '/projektai/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -88,6 +102,8 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
   '/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/darbo-erdve/palyginimas': typeof AuthenticatedDarboErdvePalyginimasRoute
+  '/projektai/$id': typeof AuthenticatedProjektaiIdRoute
   '/darbo-erdve/': typeof AuthenticatedDarboErdveIndexRoute
   '/projektai/': typeof AuthenticatedProjektaiIndexRoute
 }
@@ -100,6 +116,8 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
   '/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/darbo-erdve/palyginimas': typeof AuthenticatedDarboErdvePalyginimasRoute
+  '/projektai/$id': typeof AuthenticatedProjektaiIdRoute
   '/darbo-erdve': typeof AuthenticatedDarboErdveIndexRoute
   '/projektai': typeof AuthenticatedProjektaiIndexRoute
 }
@@ -114,6 +132,8 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/straipsnis': typeof StraipsnisRoute
   '/_authenticated/darbo-erdve/$id': typeof AuthenticatedDarboErdveIdRoute
+  '/_authenticated/darbo-erdve/palyginimas': typeof AuthenticatedDarboErdvePalyginimasRoute
+  '/_authenticated/projektai/$id': typeof AuthenticatedProjektaiIdRoute
   '/_authenticated/darbo-erdve/': typeof AuthenticatedDarboErdveIndexRoute
   '/_authenticated/projektai/': typeof AuthenticatedProjektaiIndexRoute
 }
@@ -128,6 +148,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/straipsnis'
     | '/darbo-erdve/$id'
+    | '/darbo-erdve/palyginimas'
+    | '/projektai/$id'
     | '/darbo-erdve/'
     | '/projektai/'
   fileRoutesByTo: FileRoutesByTo
@@ -140,6 +162,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/straipsnis'
     | '/darbo-erdve/$id'
+    | '/darbo-erdve/palyginimas'
+    | '/projektai/$id'
     | '/darbo-erdve'
     | '/projektai'
   id:
@@ -153,6 +177,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/straipsnis'
     | '/_authenticated/darbo-erdve/$id'
+    | '/_authenticated/darbo-erdve/palyginimas'
+    | '/_authenticated/projektai/$id'
     | '/_authenticated/darbo-erdve/'
     | '/_authenticated/projektai/'
   fileRoutesById: FileRoutesById
@@ -240,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDarboErdveIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/darbo-erdve/palyginimas': {
+      id: '/_authenticated/darbo-erdve/palyginimas'
+      path: '/darbo-erdve/palyginimas'
+      fullPath: '/darbo-erdve/palyginimas'
+      preLoaderRoute: typeof AuthenticatedDarboErdvePalyginimasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/projektai/': {
       id: '/_authenticated/projektai/'
       path: '/projektai'
@@ -247,17 +280,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjektaiIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/projektai/$id': {
+      id: '/_authenticated/projektai/$id'
+      path: '/projektai/$id'
+      fullPath: '/projektai/$id'
+      preLoaderRoute: typeof AuthenticatedProjektaiIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDarboErdveIdRoute: typeof AuthenticatedDarboErdveIdRoute
+  AuthenticatedDarboErdvePalyginimasRoute: typeof AuthenticatedDarboErdvePalyginimasRoute
+  AuthenticatedProjektaiIdRoute: typeof AuthenticatedProjektaiIdRoute
   AuthenticatedDarboErdveIndexRoute: typeof AuthenticatedDarboErdveIndexRoute
   AuthenticatedProjektaiIndexRoute: typeof AuthenticatedProjektaiIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDarboErdveIdRoute: AuthenticatedDarboErdveIdRoute,
+  AuthenticatedDarboErdvePalyginimasRoute:
+    AuthenticatedDarboErdvePalyginimasRoute,
+  AuthenticatedProjektaiIdRoute: AuthenticatedProjektaiIdRoute,
   AuthenticatedDarboErdveIndexRoute: AuthenticatedDarboErdveIndexRoute,
   AuthenticatedProjektaiIndexRoute: AuthenticatedProjektaiIndexRoute,
 }

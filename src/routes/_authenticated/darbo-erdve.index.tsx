@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
+import { Scale, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { EmptyState, ProjectSelect, WorkspaceHeader } from "@/components/workspace-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { analysesQuery, deleteAnalysis, formatDate, projectsQuery } from "@/lib/workspace";
@@ -34,6 +35,8 @@ function WorkspacePage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [projectId, setProjectId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
+  const toggle = (id: string, on: boolean) => setSelected((s) => (on ? [...s, id] : s.filter((x) => x !== id)));
 
   const del = useMutation({
     mutationFn: deleteAnalysis,
@@ -61,7 +64,19 @@ function WorkspacePage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-12 sm:px-6">
-      <WorkspaceHeader kicker="Mano darbo erdvė" title="Išsaugotos analizės" intro="Duomenys saugomi duomenų bazėje ir matomi tik jums." />
+      <WorkspaceHeader kicker="Mano darbo erdvė" title="Išsaugotos analizės" intro="Duomenys saugomi duomenų bazėje ir matomi tik jums. Pažymėkite kelias analizes, kad jas palygintumėte.">
+        {selected.length >= 2 ? (
+          <Button asChild>
+            <Link to="/darbo-erdve/palyginimas" search={{ ids: selected.join(",") }}>
+              <Scale className="mr-2 h-4 w-4" /> Palyginti pasirinktas ({selected.length})
+            </Link>
+          </Button>
+        ) : (
+          <Button variant="outline" disabled>
+            <Scale className="mr-2 h-4 w-4" /> Pažymėkite bent 2 analizes
+          </Button>
+        )}
+      </WorkspaceHeader>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <div><Label className="kicker">Pavadinimas ar tema</Label><Input value={q} onChange={(e) => setQ(e.target.value)} className="mt-1.5 bg-card" /></div>
@@ -83,9 +98,14 @@ function WorkspacePage() {
         ) : (
           <ul className="divide-y divide-border border-y border-border">
             {rows.map((a) => (
-              <li key={a.id} className="grid gap-2 py-4 sm:grid-cols-[110px_1fr_auto] sm:items-center">
+              <li key={a.id} className="grid grid-cols-[auto_1fr_auto] gap-x-3 gap-y-1 py-4 sm:grid-cols-[auto_110px_1fr_auto] sm:items-center">
+                <Checkbox
+                  aria-label={`Pažymėti palyginimui: ${a.title || a.topic}`}
+                  checked={selected.includes(a.id)}
+                  onCheckedChange={(v) => toggle(a.id, v === true)}
+                />
                 <span className="font-mono text-xs text-muted-foreground">{formatDate(a.analyzed_at)}</span>
-                <div>
+                <div className="col-span-2 col-start-2 row-start-2 sm:col-span-1 sm:col-start-auto sm:row-start-auto">
                   <Link to="/darbo-erdve/$id" params={{ id: a.id }} className="font-serif text-lg hover:underline">{a.title || a.topic}</Link>
                   <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
                     <span>{a.portal || "Portalas nenurodytas"}</span>

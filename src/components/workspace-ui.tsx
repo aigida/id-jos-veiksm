@@ -42,19 +42,28 @@ export function WorkspaceHeader({ kicker, title, intro, children }: { kicker: st
       <nav className="mb-8 flex gap-1 border-b border-border text-sm" aria-label="Darbo erdvė">
         {(
           [
-            { to: "/darbo-erdve", label: "Analizės" },
-            { to: "/projektai", label: "Projektai" },
+            { to: "/darbo-erdve", label: "Analizės", exact: true },
+            { to: "/projektai", label: "Projektai", exact: false },
           ] as const
         ).map((l) => (
           <Link
             key={l.to}
             to={l.to}
+            activeOptions={{ exact: l.exact }}
             className="-mb-px border-b-2 border-transparent px-3 py-2 text-muted-foreground hover:text-foreground"
             activeProps={{ className: "border-foreground text-foreground font-medium" }}
           >
             {l.label}
           </Link>
         ))}
+        <Link
+          to="/darbo-erdve/palyginimas"
+          search={{ ids: undefined }}
+          className="-mb-px border-b-2 border-transparent px-3 py-2 text-muted-foreground hover:text-foreground"
+          activeProps={{ className: "border-foreground text-foreground font-medium" }}
+        >
+          Palyginimas
+        </Link>
       </nav>
       <p className="kicker mb-3">{kicker}</p>
       <div className="flex flex-wrap items-end justify-between gap-4">

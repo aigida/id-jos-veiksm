@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -61,7 +61,7 @@ function ProjectsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-12 sm:px-6">
-      <WorkspaceHeader kicker="Mano darbo erdvė" title="Tyrimų projektai" intro="Analizę projektui priskirsite jos puslapyje arba išsaugodami." />
+      <WorkspaceHeader kicker="Mano darbo erdvė" title="Tyrimų projektai" intro="Atidarykite projektą, kad pridėtumėte analizių, rašytumėte pastabas ir palygintumėte jo analizes." />
       <div className="mt-8 grid gap-8 md:grid-cols-[1fr_340px]">
         <div>
           {projects.data?.length ? (
@@ -69,7 +69,7 @@ function ProjectsPage() {
               {projects.data.map((p) => (
                 <li key={p.id} className="flex items-start justify-between gap-4 py-4">
                   <div>
-                    <p className="font-serif text-lg">{p.name}</p>
+                    <Link to="/projektai/$id" params={{ id: p.id }} className="font-serif text-lg hover:underline">{p.name}</Link>
                     {p.description ? <p className="mt-1 text-sm text-muted-foreground">{p.description}</p> : null}
                     <p className="mt-1 font-mono text-xs text-muted-foreground">{count(p.id)} analizės</p>
                   </div>
